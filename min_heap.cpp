@@ -2,6 +2,7 @@
 #include <vector>
 #include <utility>
 
+
 template <typename T>
 class MinHeap {
  private:
@@ -11,7 +12,6 @@ class MinHeap {
     MinHeap(const std::vector<T>& v)
     : heap(v) {
         make_heap();
-        print();
     }
 
     void min_heapify(int i) {
@@ -45,13 +45,40 @@ class MinHeap {
         heapify_up(heap.size() - 1);
     }
 
+    T extract_min() {
+        T min = heap.front();
+        std::swap(heap[0], heap[heap.size() - 1]);
+        heap.pop_back();
+        min_heapify(0);
+
+        return min;
+    }
+
     void print() {
         for (auto e : heap)
             std::cout << e << " ";
     }
 };
 
+
+template <typename T>
+void heapsort(std::vector<T>& v) {
+    MinHeap<T> min_heap = MinHeap<T>(v);
+    std::vector<T> v_sorted;
+    
+    for (int i = 0; i < v.size(); ++i)
+        v_sorted.push_back(min_heap.extract_min());
+
+    v = v_sorted;
+}
+
+
 int main() {
     std::vector<int> v {17, 23, 8, 19, 5, 11, 3};
     MinHeap<int> mh = MinHeap<int>(v);
+
+    std::cout << "\n";
+    heapsort(v);
+    for (auto e : v)
+        std::cout << e << " ";
 }
